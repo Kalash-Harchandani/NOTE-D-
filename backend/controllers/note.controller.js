@@ -3,7 +3,10 @@ import Note from "../models/notes.js"
 export const getNotesInFolder = async (req,res) =>{
     try {
         const {folderId} = req.params;
-        const notes = await Note.find({folderId});
+        const notes = await Note.find({
+            folderId,
+            userId : req.user._id
+        });
         res.status(200).json(notes);
     } catch (error) {
         res.status(500).json({ message: "Server error" });
@@ -13,7 +16,10 @@ export const getNotesInFolder = async (req,res) =>{
 export const getNote = async (req,res) =>{
     try {
         const {id} = req.params;
-        const note = await Note.findById(id);
+        const note = await Note.findOne({
+            _id : id,
+            userId : req.user._id
+        });
         res.status(200).json(note);
     } catch (error) {
         res.status(500).json({ message: "Server error" });
@@ -23,9 +29,9 @@ export const getNote = async (req,res) =>{
 export const createNote = async(req,res) => {
     try {
         const { folderId } = req.params;
-        const {userId,title,content,tag} = req.body;
+        const {title,content,tag} = req.body;
         const newNote = await Note.create({
-            userId,folderId,title,content,tag
+            userId : req.user._id,folderId,title,content,tag
         });
         res.status(201).json(newNote);
     } catch (error) {
@@ -37,7 +43,10 @@ export const createNote = async(req,res) => {
 export const deleteNote = async(req,res) => {
     try {
         const {id} = req.params;
-        const note = await Note.findByIdAndDelete(id);
+        const note = await Note.findByIdAndDelete({
+            id,
+            userId : req.user._id
+        });
         if(!note){
             return res.status(404).json({message : "Note not found"});
         }

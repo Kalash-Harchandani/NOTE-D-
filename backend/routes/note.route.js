@@ -5,8 +5,10 @@ import {
     createNote,
     deleteNote
 } from "../controllers/note.controller.js";
+import { protect } from "../middleware/auth.middleware.js";
 
 const router  = express.Router();
+router.use(protect);
 
 router
     .route("/folder/:folderId")

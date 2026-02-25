@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const folderSchema = new mongoose.Schema(
   {
     userId: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
       required: true,
     },
     title: {
