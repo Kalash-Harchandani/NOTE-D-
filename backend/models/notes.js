@@ -2,13 +2,13 @@ import mongoose, { mongo } from "mongoose";
 const notesSchema = new mongoose.Schema(
   {
     userId: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: String,
       ref: "User",
       required: true,
       index: true,
     },
     folderId: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: String,
       ref: "Folder",
       required: true,
       index: true,

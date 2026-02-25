@@ -1,4 +1,3 @@
-import folders from "../models/folders.js";
 import Folder from "../models/folders.js";
 export const getFolders = async (req, res) => {
   try {
