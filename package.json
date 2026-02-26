@@ -1,0 +1,25 @@
+{
+  "name": "note-d-",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+  "server": "npm run dev --prefix backend",
+  "client": "npm start --prefix frontend",
+  "dev": "concurrently \"npm run server\" \"npm run client\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Kalash-Harchandani/NOTE-D-.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Kalash-Harchandani/NOTE-D-/issues"
+  },
+  "homepage": "https://github.com/Kalash-Harchandani/NOTE-D-#readme",
+  "description": "",
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}

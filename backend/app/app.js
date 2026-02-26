@@ -3,7 +3,15 @@ import healthRoute from "../routes/health.route.js";
 import folderRoutes from "../routes/folder.route.js";
 import noteRoutes from "../routes/note.route.js";
 import authRoutes from "../routes/auth.route.js"
+import cors from "cors";
 const app = express();
+
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+  })
+);
 
 app.use(express.json());
 
