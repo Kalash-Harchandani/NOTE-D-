@@ -3,7 +3,8 @@ import {
     getNotesInFolder,
     getNote,
     createNote,
-    deleteNote
+    deleteNote,
+    updateNote
 } from "../controllers/note.controller.js";
 import { protect } from "../middleware/auth.middleware.js";
 
@@ -18,6 +19,7 @@ router
 router
     .route("/:id")
     .get(getNote)
-    .delete(deleteNote);
+    .delete(deleteNote)
+    .put(updateNote);
     
 export default router;
