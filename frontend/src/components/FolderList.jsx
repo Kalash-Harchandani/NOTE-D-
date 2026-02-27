@@ -4,8 +4,31 @@ import { useState, useEffect } from "react";
 const FolderList = ({ onSelectFolder }) => {
   const [folders, setFolders] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [newFolderTitle,setNewFolderTitle] = useState("");
+
 
   const token = localStorage.getItem("token");
+
+
+
+  const handleCreateFolder = async() => {
+        if(!newFolderTitle.trim()) return;
+        try {
+            const res = axios.post("http://localhost:6005/api/folders",
+                {title : newFolderTitle},
+                {
+                    headers :
+                    {
+                        Authorization : `Bearer ${token}`
+                    },
+                }
+            );
+            setFolders([...folders,(await res).data]);
+            setNewFolderTitle("");
+        } catch (error) {
+            console.error("Error creating folder",error);
+        }
+  }
 
   useEffect(() => {
     const fetchFolders = async () => {
@@ -49,6 +72,11 @@ const FolderList = ({ onSelectFolder }) => {
           </div>
         ))
       )}
+
+      <button onClick={handleCreateFolder}>Create New Folder</button>
+
+      <input type="text" placeholder="New Folder Name" value={newFolderTitle} onChange={(e)=>{setNewFolderTitle(e.target.value)}} />
+
     </>
   );
 };
