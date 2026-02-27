@@ -20,6 +20,7 @@ const Dashboard = () => {
 
       <NoteList
         selectedFolder={selectedFolder}
+        selectedNote = {selectedNote}
         onSelectNote={setSelectedNote}
       />
 

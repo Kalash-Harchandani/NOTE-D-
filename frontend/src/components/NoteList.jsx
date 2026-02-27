@@ -1,13 +1,32 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 
-const NoteList = ({ selectedFolder, onSelectNote }) => {
+const NoteList = ({ selectedFolder, onSelectNote, selectedNote }) => {
   const [notes, setNotes] = useState([]);
   const [newNoteTitle, setNewNoteTitle] = useState("");
-  const [newNote, setNewNote] = useState([]);
+  const [newNote, setNewNote] = useState("");
   const [tag, setTag] = useState("");
 
   const token = localStorage.getItem("token");
+
+  const handleDeleteNote = async () => {
+    try {
+      await axios.delete(
+        `http://localhost:6005/api/notes/${selectedNote._id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+      setNotes(prev =>
+      prev.filter(note => note._id !== selectedNote._id)
+      );
+      onSelectNote(null);
+    } catch (error) {
+      console.error("Error deleting notes", error);
+    }
+  };
 
   const handleNewNote = async () => {
     try {
@@ -20,7 +39,7 @@ const NoteList = ({ selectedFolder, onSelectNote }) => {
           },
         },
       );
-      setNotes(prev=>[...prev, res.data]);
+      setNotes((prev) => [...prev, res.data]);
       setNewNoteTitle("");
       setNewNote("");
       setTag("");
@@ -83,6 +102,12 @@ const NoteList = ({ selectedFolder, onSelectNote }) => {
 
         <button onClick={handleNewNote}>Create Note</button>
       </div>
+
+      {selectedNote && (
+        <button onClick={handleDeleteNote}>
+          Delete Selected Note
+        </button>
+      )}
 
       {notes.length === 0 ? (
         <p>No notes found</p>

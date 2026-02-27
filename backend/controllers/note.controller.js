@@ -48,7 +48,7 @@ export const deleteNote = async (req, res) => {
   try {
     const { id } = req.params;
     const note = await Note.findByIdAndDelete({
-      id,
+      _id : id,
       userId: req.user._id,
     });
     if (!note) {
@@ -56,6 +56,7 @@ export const deleteNote = async (req, res) => {
     }
     res.status(200).json({ message: "Note deleted !" });
   } catch (error) {
+    console.log(error)
     res.status(500).json({ message: "Server error" });
   }
 };
