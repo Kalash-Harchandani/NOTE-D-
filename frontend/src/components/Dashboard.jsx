@@ -12,6 +12,7 @@ const Dashboard = () => {
       <h1>Dashboard</h1>
 
       <FolderList
+        selectedFolder={selectedFolder}
         onSelectFolder={(folder) => {
           setSelectedFolder(folder);
           setSelectedNote(null);

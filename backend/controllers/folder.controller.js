@@ -28,7 +28,7 @@ export const deleteFolder = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const deletedFolder = await Folder.findByIdAndDelete({
+    const deletedFolder = await Folder.findOneAndDelete({
        _id : id,
        userId : req.user._id
     });
