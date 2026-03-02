@@ -9,6 +9,49 @@ const NoteList = ({ selectedFolder, onSelectNote, selectedNote }) => {
 
   const token = localStorage.getItem("token");
 
+  const fetchNotes = async () => {
+    try {
+      const res = await axios.get(
+        `http://localhost:6005/api/notes/folder/${selectedFolder._id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      setNotes(Array.isArray(res.data) ? res.data : []);
+    } catch (error) {
+      console.error("Error fetching notes:", error);
+    }
+  };
+
+  const handleUpdateNote = async () => {
+    if (!selectedNote || !selectedNote._id) {
+      console.log("No note selected");
+      return;
+    }
+    try {
+      const res = await axios.put(
+        `http://localhost:6005/api/notes/${selectedNote._id}`,
+        { title: newNoteTitle, content: newNote, tag: tag },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+      await fetchNotes();
+      onSelectNote(null);
+    } catch (error) {
+      console.error(
+        "Error updating note:",
+        error.response?.data || error.message,
+      );
+    }
+  };
+
   const handleDeleteNote = async () => {
     try {
       await axios.delete(
@@ -19,9 +62,7 @@ const NoteList = ({ selectedFolder, onSelectNote, selectedNote }) => {
           },
         },
       );
-      setNotes(prev =>
-      prev.filter(note => note._id !== selectedNote._id)
-      );
+      await fetchNotes();
       onSelectNote(null);
     } catch (error) {
       console.error("Error deleting notes", error);
@@ -39,7 +80,7 @@ const NoteList = ({ selectedFolder, onSelectNote, selectedNote }) => {
           },
         },
       );
-      setNotes((prev) => [...prev, res.data]);
+      await fetchNotes();
       setNewNoteTitle("");
       setNewNote("");
       setTag("");
@@ -51,26 +92,9 @@ const NoteList = ({ selectedFolder, onSelectNote, selectedNote }) => {
 
   useEffect(() => {
     if (!selectedFolder) return;
-
-    const fetchNotes = async () => {
-      try {
-        const res = await axios.get(
-          `http://localhost:6005/api/notes/folder/${selectedFolder._id}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          },
-        );
-
-        setNotes(Array.isArray(res.data) ? res.data : []);
-      } catch (error) {
-        console.error("Error fetching notes:", error);
-      }
-    };
-
+    onSelectNote(null);
     fetchNotes();
-  }, [selectedFolder, token]);
+  }, [selectedFolder,token]);
 
   if (!selectedFolder) return null;
 
@@ -104,9 +128,11 @@ const NoteList = ({ selectedFolder, onSelectNote, selectedNote }) => {
       </div>
 
       {selectedNote && (
-        <button onClick={handleDeleteNote}>
-          Delete Selected Note
-        </button>
+        <button onClick={handleDeleteNote}>Delete Selected Note</button>
+      )}
+
+      {selectedNote && (
+        <button onClick={handleUpdateNote}>Update Selected Note</button>
       )}
 
       {notes.length === 0 ? (

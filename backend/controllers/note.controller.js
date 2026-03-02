@@ -79,7 +79,7 @@ export const updateNote = async (req, res) => {
 
     const updated = await note.save();
 
-    res.status(200).json({ message: "Updated" });
+    res.status(200).json({updated});
   } catch (error) {
     res.status(500).json({ message: "Server Error" });
   }
